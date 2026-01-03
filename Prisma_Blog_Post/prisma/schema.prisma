@@ -1,0 +1,123 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Post {
+  id         String     @id @default(uuid())
+  title      String     @db.VarChar(225)
+  content    String     @db.Text
+  thubnail   String?
+  isFeatured Boolean    @default(false)
+  status     PostStatus
+  tags       String[]
+  views      Int        @default(0)
+  autherId   String
+  createdId  DateTime   @default(now())
+  updatedId  DateTime   @updatedAt
+  comments   Commnet[]
+
+  @@index([autherId])
+  @@map("posts")
+}
+
+model Commnet {
+  id        String        @id @default(uuid())
+  content   String        @db.Text
+  autherId  String
+  postId    String
+  post      Post          @relation(fields: [postId], references: [id])
+  parentId  String?
+  parent    Commnet?      @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Commnet[]     @relation("CommentReplies")
+  status    CommnetStatus @default(APPROVED)
+  createdId DateTime      @default(now())
+  updatedId DateTime      @updatedAt
+
+  @@index([postId])
+  @@index([autherId])
+  @@map("comments")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHEIVED
+}
+
+enum CommnetStatus {
+  APPROVED
+  REJECT
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  role   String? @default("user")
+  phone  String?
+  status String? @default("active")
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
