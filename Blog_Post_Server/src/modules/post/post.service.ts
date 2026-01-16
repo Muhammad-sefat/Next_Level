@@ -94,12 +94,12 @@ const getAllPost = async ({
     });
   }
 
+  const whereClause = andConditions.length > 0 ? { AND: andConditions } : {};
+
   const allPost = await prisma.post.findMany({
     take: limit,
     skip,
-    where: {
-      AND: andConditions,
-    },
+    where: whereClause,
     orderBy: {
       [sortBy]: sortOrder,
     },
@@ -110,9 +110,7 @@ const getAllPost = async ({
     },
   });
   const total = await prisma.post.count({
-    where: {
-      AND: andConditions,
-    },
+    where: whereClause,
   });
   return {
     data: allPost,

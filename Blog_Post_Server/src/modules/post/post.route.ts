@@ -12,7 +12,11 @@ router.get(
 router.get("/", PostController.getAllPost);
 router.get("/stats", auth(UserRole.ADMIN), PostController.getStats);
 router.get("/:postId", PostController.getPostById);
-router.post("/", auth(UserRole.USER), PostController.createPost);
+router.post(
+  "/",
+  auth(UserRole.USER, UserRole.ADMIN),
+  PostController.createPost
+);
 router.patch(
   "/:postId",
   auth(UserRole.USER, UserRole.ADMIN),

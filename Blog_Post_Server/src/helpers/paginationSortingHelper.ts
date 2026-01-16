@@ -18,7 +18,7 @@ const paginationSortingHelper = (options: IOptions): IOptionsResult => {
   const limit: number = Number(options.limit) || 10;
   const skip = (page - 1) * limit;
 
-  const sortBy: string = options.sortBy || "createdAt";
+  const sortBy: string = options.sortBy || "createdId";
   const sortOrder: string = options.sortOrder || "desc";
   return {
     page,

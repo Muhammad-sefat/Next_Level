@@ -19,7 +19,4 @@ app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use("/posts", postRouter);
 app.use("/comments", commentRouter);
 
-app.get("/", (res, req) => {
-  console.log("hello world");
-});
 export default app;

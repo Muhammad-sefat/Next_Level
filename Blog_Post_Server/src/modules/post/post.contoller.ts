@@ -37,7 +37,7 @@ const getAllPost = async (req: Request, res: Response) => {
 
     const status = req.query.status as PostStatus | undefined;
 
-    const autherId = req.query.authorId as string | undefined;
+    const autherId = req.query.autherId as string | undefined;
 
     const { page, limit, skip, sortBy, sortOrder } = paginationSortingHelper(
       req.query
