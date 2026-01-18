@@ -4,7 +4,7 @@ import { CommentService } from "./commnet.service";
 const createComment = async (req: Request, res: Response) => {
   try {
     const user = req.user;
-    req.body.authorId = user?.id;
+    req.body.autherId = user?.id;
     const result = await CommentService.createComment(req.body);
     res.status(201).json(result);
   } catch (e) {
@@ -30,8 +30,8 @@ const getCommentById = async (req: Request, res: Response) => {
 
 const getCommentsByAuthor = async (req: Request, res: Response) => {
   try {
-    const { authorId } = req.params;
-    const result = await CommentService.getCommentsByAuthor(authorId as string);
+    const { autherId } = req.params;
+    const result = await CommentService.getCommentsByAuthor(autherId as string);
     res.status(200).json(result);
   } catch (e) {
     res.status(400).json({

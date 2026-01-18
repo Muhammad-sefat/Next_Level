@@ -176,7 +176,7 @@ const getMyPosts = async (autherId: string) => {
   await prisma.user.findUniqueOrThrow({
     where: {
       id: autherId,
-      status: "ACTIVE",
+      status: "active",
     },
     select: {
       id: true,
@@ -243,7 +243,8 @@ const updatePost = async (
 
   return result;
 };
-//**
+
+//*
 // 1. user - nijar created post delete korta parbe
 // 2. admin - sobar post delete korta parbe
 // */
